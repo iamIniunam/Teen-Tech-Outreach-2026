@@ -71,6 +71,19 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Tap me'),
             ),
+
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) =>
+            //             ThankYouPage(bgColor: colors[colorIndex]),
+            //       ),
+            //     );
+            //   },
+            //   child: const Text('Tap me'),
+            // ),
           ],
         ),
       ),
