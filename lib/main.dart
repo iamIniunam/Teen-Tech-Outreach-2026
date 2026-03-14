@@ -1,3 +1,4 @@
+import 'package:demo_app/thank_you_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
+      // home: HomeworkPage(),
     );
   }
 }
@@ -39,52 +41,60 @@ class _MyHomePageState extends State<MyHomePage> {
     Colors.red,
     Colors.green,
     Colors.orange,
+    Colors.brown
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colors[colorIndex],
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Text
-            Text(
-              messages[messageIndex],
-              style: const TextStyle(
-                fontSize: 36,
-                color: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Text
+              Text(
+                messages[messageIndex],
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 36,
+                  color: Colors.black,
+                ),
               ),
-            ),
 
-            // Spacing
-            const SizedBox(height: 20),
+              // Spacing
+              const SizedBox(height: 20),
 
-            // Button
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  messageIndex = (messageIndex + 1) % messages.length;
-                  colorIndex = (colorIndex + 1) % colors.length;
-                });
-              },
-              child: const Text('Tap me'),
-            ),
+              // // Button
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    messageIndex = (messageIndex + 1) % messages.length;
+                    colorIndex = (colorIndex + 1) % colors.length;
+                  });
+                },
+                child: const Text('Tap me'),
+              ),
 
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) =>
-            //             ThankYouPage(bgColor: colors[colorIndex]),
-            //       ),
-            //     );
-            //   },
-            //   child: const Text('Tap me'),
-            // ),
-          ],
+              // Spacing
+              const SizedBox(height: 20),
+
+              // Button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ThankYouPage(bgColor: colors[colorIndex]),
+                    ),
+                  );
+                },
+                child: const Text('Navigate'),
+              ),
+            ],
+          ),
         ),
       ),
     );
