@@ -50,6 +50,13 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         fontFamily: 'Roboto', // Modern, clean typography
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: ZoomPageTransitionsBuilder(
+              allowSnapshotting: false,
+            ),
+          },
+        ),
       ),
       home: const HomePage(),
     );
