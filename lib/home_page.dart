@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     // =================================================================
-    // 👉 KID CODER TASK: CHANGE THE WELCOME TEXT!
+    // TODO: KID CODER TASK - CHANGE THE WELCOME TEXT!
     // Edit the text inside the quotes below. Add emojis or your names!
     // Save (Ctrl + S) to see the title change on the screen.
     // =================================================================

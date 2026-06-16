@@ -13,7 +13,7 @@ class SpeedTapGamePage extends StatefulWidget {
 
 class _SpeedTapGamePageState extends State<SpeedTapGamePage> {
   // =================================================================
-  // 👉 KID CODER TASK: HACK THE GAME RULES!
+  // TODO: KID CODER TASK - HACK THE GAME RULES!
   // 1. Change "gameDurationSeconds" to 5 to make the game shorter and faster!
   // 2. Change "pointsPerTap" to 10 or 100 to get a super high score in one tap!
   // Press Save (Ctrl + S) to see your hacks instantly applied!

@@ -26,7 +26,7 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
   final TextEditingController _issueController = TextEditingController();
 
   // =================================================================
-  // 👉 KID CODER TASK: ADD YOUR OWN COMMUNITY ISSUES IN CODE!
+  // TODO: KID CODER TASK - ADD YOUR OWN COMMUNITY ISSUES IN CODE!
   // You can add a new issue here! Use this format inside the list below:
   // CivicIssue(title: "Your issue description here", icon: "emoji", votes: 10),
   // Make sure to save (Ctrl + S) to see it appear in the dashboard list!
@@ -38,15 +38,20 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
     super.initState();
     _issues = [
       CivicIssue(
-          title: "Fix potholes on Teshie Beach Road", icon: "🕳️", votes: 12),
+        title: "Fix potholes on Teshie Beach Road",
+        icon: "🕳️",
+        votes: 12,
+      ),
       CivicIssue(
-          title: "Install solar streetlights near Methodist Church",
-          icon: "💡",
-          votes: 8),
+        title: "Install solar streetlights near Methodist Church",
+        icon: "💡",
+        votes: 8,
+      ),
       CivicIssue(
-          title: "Open a free youth coding lab in Accra",
-          icon: "💻",
-          votes: 25),
+        title: "Open a free youth coding lab in Accra",
+        icon: "💻",
+        votes: 25,
+      ),
     ];
   }
 
@@ -77,7 +82,7 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
   @override
   Widget build(BuildContext context) {
     // =================================================================
-    // 👉 KID CODER TASK: CHANGE THE PAGE TITLE!
+    // TODO: KID CODER TASK - CHANGE THE PAGE TITLE!
     // Edit the text inside the quotes below to rename this dashboard page.
     // Save (Ctrl + S) to see the title change at the top of the screen!
     // =================================================================

@@ -4,8 +4,6 @@ import 'package:demo_app/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Hide system status bar and navigation bar (immersive sticky mode) for kiosk stand view
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const MyApp());
 }
 
@@ -15,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // =================================================================
-    // 👉 KID CODER TASK 1: CHANGE THE APP COLOR!
+    // TODO: KID CODER TASK 1 - CHANGE THE APP COLOR!
     // Find "Colors.deepPurple" below. Try changing it to another color:
     // Colors.blue, Colors.teal, Colors.amber, Colors.pink, Colors.red, Colors.green
     // Then press Save (Ctrl + S) to watch the app colors change instantly!
@@ -23,11 +21,24 @@ class MyApp extends StatelessWidget {
     const Color primarySeedColor = Colors.deepPurple;
 
     // =================================================================
-    // 👉 KID CODER TASK 2: CHANGE APP BRIGHTNESS (LIGHT VS. DARK MODE)!
+    // TODO: KID CODER TASK 2 - CHANGE APP BRIGHTNESS (LIGHT VS. DARK MODE)!
     // Find "Brightness.dark" below. Change it to "Brightness.light"
     // to see the app switch to light mode instantly!
     // =================================================================
     const Brightness appBrightness = Brightness.dark;
+
+    // Set the status bar and bottom navigation bar to be transparent.
+    // The icon colors automatically adapt (light icons for dark mode, dark icons for light mode).
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness:
+          appBrightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      statusBarBrightness: appBrightness, // for iOS
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness:
+          appBrightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ));
 
     return MaterialApp(
       title: 'TeenTech Hub 2026',
