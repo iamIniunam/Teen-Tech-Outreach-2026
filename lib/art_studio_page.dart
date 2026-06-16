@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:demo_app/thank_you_page.dart';
+import 'package:demo_app/history_state.dart';
 
 class ArtStudioPage extends StatefulWidget {
   final String schoolName;
@@ -66,187 +67,308 @@ class _ArtStudioPageState extends State<ArtStudioPage> {
   Widget build(BuildContext context) {
     const indigoColor = Colors.indigoAccent;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("🎨 Pixel Art Studio"),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("🎨 Pixel Art Studio"),
+          centerTitle: true,
+          bottom: const TabBar(
+            indicatorColor: Colors.indigoAccent,
+            labelColor: Colors.indigoAccent,
+            unselectedLabelColor: Colors.grey,
+            tabs: [
+              Tab(text: "Canvas", icon: Icon(Icons.palette_rounded)),
+              Tab(text: "Gallery", icon: Icon(Icons.photo_library_rounded)),
+            ],
+          ),
+        ),
+        body: TabBarView(
           children: [
-            // Top Banner info (edge-to-edge)
-            Container(
-              color: indigoColor.withOpacity(0.15),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0, vertical: 12.0),
-              width: double.infinity,
-              child: Text(
-                "Artist: ${widget.schoolName}",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.indigoAccent,
-                ),
-              ),
-            ),
-            // Padded content area
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Pixel Drawing Board
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.grey.shade700, width: 2),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: _gridSize,
-                            crossAxisSpacing: 4.0,
-                            mainAxisSpacing: 4.0,
-                          ),
-                          itemCount: _gridSize * _gridSize,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () => _colorPixel(index),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 150),
-                                decoration: BoxDecoration(
-                                  color: _gridColors[index],
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Colors.black45,
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+            // Tab 1: Active Drawing Canvas
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Top Banner info (edge-to-edge)
+                  Container(
+                    color: indigoColor.withOpacity(0.15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 12.0),
+                    width: double.infinity,
+                    child: Text(
+                      "Artist: ${widget.schoolName}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigoAccent,
                       ),
                     ),
-                    const SizedBox(height: 24),
-
-                    // Color Palette Picker Title
-                    const Text(
-                      "Pick a Paint Color:",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Color Palette Picker List
-                    SizedBox(
-                      height: 48,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _paletteColors.length,
-                        itemBuilder: (context, index) {
-                          final color = _paletteColors[index];
-                          final isSelected = _selectedColor == color;
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedColor = color;
-                              });
-                            },
+                  ),
+                  // Padded content area
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Pixel Drawing Board
+                          AspectRatio(
+                            aspectRatio: 1,
                             child: Container(
-                              margin: const EdgeInsets.only(right: 12.0),
-                              width: 44,
-                              height: 44,
                               decoration: BoxDecoration(
-                                color: color,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color:
-                                      isSelected ? Colors.white : Colors.transparent,
-                                  width: 3.0,
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: Colors.grey.shade700, width: 2),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: GridView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: _gridSize,
+                                  crossAxisSpacing: 4.0,
+                                  mainAxisSpacing: 4.0,
                                 ),
-                                boxShadow: [
-                                  if (isSelected)
-                                    BoxShadow(
-                                      color: color.withOpacity(0.5),
-                                      blurRadius: 8,
-                                      spreadRadius: 2,
+                                itemCount: _gridSize * _gridSize,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () => _colorPixel(index),
+                                    child: AnimatedContainer(
+                                      duration: const Duration(milliseconds: 150),
+                                      decoration: BoxDecoration(
+                                        color: _gridColors[index],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: Colors.black45,
+                                          width: 1,
+                                        ),
+                                      ),
                                     ),
-                                ],
-                              ),
-                              child: isSelected
-                                  ? const Icon(
-                                      Icons.check,
-                                      color: Colors.black87,
-                                      size: 20,
-                                    )
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const Spacer(),
-
-                    // Grid Reset and Navigation Options
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: _resetGrid,
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                  );
+                                },
                               ),
                             ),
-                            child: const Text("Clear Canvas"),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ThankYouPage(
-                                    bgColor: Colors.indigo.shade800,
-                                    customMessage:
-                                        "Beautiful artwork, ${widget.schoolName}!",
+                          const SizedBox(height: 24),
+
+                          // Color Palette Picker Title
+                          const Text(
+                            "Pick a Paint Color:",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Color Palette Picker List
+                          SizedBox(
+                            height: 48,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _paletteColors.length,
+                              itemBuilder: (context, index) {
+                                final color = _paletteColors[index];
+                                final isSelected = _selectedColor == color;
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedColor = color;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 12.0),
+                                    width: 44,
+                                    height: 44,
+                                    decoration: BoxDecoration(
+                                      color: color,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color:
+                                            isSelected ? Colors.white : Colors.transparent,
+                                        width: 3.0,
+                                      ),
+                                      boxShadow: [
+                                        if (isSelected)
+                                          BoxShadow(
+                                            color: color.withOpacity(0.5),
+                                            blurRadius: 8,
+                                            spreadRadius: 2,
+                                          ),
+                                      ],
+                                    ),
+                                    child: isSelected
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.black87,
+                                            size: 20,
+                                          )
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const Spacer(),
+
+                          // Grid Reset and Navigation Options
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: _resetGrid,
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text("Clear Canvas"),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    // Save the artwork to persistent global gallery before navigating!
+                                    HistoryState.addArt(widget.schoolName, _gridColors, _gridSize);
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ThankYouPage(
+                                          bgColor: Colors.indigo.shade800,
+                                          customMessage:
+                                              "Beautiful artwork, ${widget.schoolName}!",
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    backgroundColor: indigoColor,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Submit & Launch 🚀",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: indigoColor,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
                               ),
-                            ),
-                            child: const Text(
-                              "Submit & Launch 🚀",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+            // Tab 2: Gallery
+            _buildGalleryTab(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildGalleryTab() {
+    final artworks = HistoryState.artGallery;
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            color: Colors.indigoAccent.withOpacity(0.05),
+            width: double.infinity,
+            child: const Text(
+              "🖼️ Gallery of Outreach Masterpieces 🎨",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.indigoAccent),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: artworks.isEmpty
+                ? const Center(child: Text("No artworks submitted yet. Draw first!"))
+                : GridView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemCount: artworks.length,
+                    itemBuilder: (context, index) {
+                      final art = artworks[index];
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            children: [
+                              // Mini grid display
+                              Expanded(
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: GridView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: art.gridSize,
+                                        crossAxisSpacing: 2.0,
+                                        mainAxisSpacing: 2.0,
+                                      ),
+                                      itemCount: art.gridColors.length,
+                                      itemBuilder: (context, pixelIndex) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: art.gridColors[pixelIndex],
+                                            borderRadius: BorderRadius.circular(2),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              // School / Creator name
+                              Text(
+                                art.schoolName,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                "Artist",
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey.shade400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }
