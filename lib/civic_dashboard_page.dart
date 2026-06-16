@@ -137,7 +137,8 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                     Expanded(
                       child: _issues.isEmpty
                           ? const Center(
-                              child: Text("No reported issues yet. Be the first!"))
+                              child:
+                                  Text("No reported issues yet. Be the first!"))
                           : ListView.builder(
                               padding: const EdgeInsets.all(16.0),
                               itemCount: _issues.length,
@@ -189,7 +190,8 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                                               issue.votes++;
                                             });
                                           },
-                                          icon: const Icon(Icons.thumb_up_rounded),
+                                          icon: const Icon(
+                                              Icons.thumb_up_rounded),
                                           style: IconButton.styleFrom(
                                             backgroundColor:
                                                 Colors.teal.withOpacity(0.25),
@@ -227,8 +229,8 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                                   controller: _issueController,
                                   decoration: InputDecoration(
                                     hintText: "Report a new local issue...",
-                                    contentPadding:
-                                        const EdgeInsets.symmetric(horizontal: 16),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -267,7 +269,8 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                             },
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                               foregroundColor:
                                   Theme.of(context).colorScheme.onPrimary,
                               shape: RoundedRectangleBorder(
@@ -307,13 +310,17 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
             width: double.infinity,
             child: const Text(
               "📢 Persistent Reports from all Accra Schools:",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.tealAccent),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Colors.tealAccent),
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: submissions.isEmpty
-                ? const Center(child: Text("No community reports yet. Be the first!"))
+                ? const Center(
+                    child: Text("No community reports yet. Be the first!"))
                 : ListView.builder(
                     padding: const EdgeInsets.all(16.0),
                     itemCount: submissions.length,
@@ -383,7 +390,8 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                                 },
                                 icon: const Icon(Icons.thumb_up_rounded),
                                 style: IconButton.styleFrom(
-                                  backgroundColor: Colors.teal.withOpacity(0.25),
+                                  backgroundColor:
+                                      Colors.teal.withOpacity(0.25),
                                   foregroundColor: Colors.tealAccent,
                                 ),
                               ),

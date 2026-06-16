@@ -319,6 +319,13 @@ class _SpeedTapGamePageState extends State<SpeedTapGamePage> {
                             entry.schoolName,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          subtitle: Text(
+                            "Attempts: ${entry.trials}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade400,
+                            ),
+                          ),
                           trailing: Text(
                             "${entry.score} pts",
                             style: const TextStyle(

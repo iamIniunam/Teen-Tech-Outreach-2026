@@ -228,20 +228,25 @@ class _ArtStudioPageState extends State<ArtStudioPage> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    // Save the artwork to persistent global gallery before navigating!
-                                    HistoryState.addArt(widget.schoolName, _gridColors, _gridSize);
+                                  onPressed: () async {
+                                    // Save the artwork to persistent global gallery
+                                    await HistoryState.addArt(widget.schoolName, _gridColors, _gridSize);
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ThankYouPage(
-                                          bgColor: Colors.indigo.shade800,
-                                          customMessage:
-                                              "Beautiful artwork, ${widget.schoolName}!",
+                                    if (context.mounted) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ThankYouPage(
+                                            bgColor: Colors.indigo.shade800,
+                                            customMessage:
+                                                "Beautiful artwork, ${widget.schoolName}!",
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                      if (mounted) {
+                                        _resetGrid(); // Clears active canvas and refreshes/updates the Gallery tab
+                                      }
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(vertical: 16),

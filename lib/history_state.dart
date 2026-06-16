@@ -32,18 +32,21 @@ class CivicSubmission {
 
 class LeaderboardEntry {
   final String schoolName;
-  final int score;
+  int score;
+  int trials;
   final DateTime timestamp;
 
   LeaderboardEntry({
     required this.schoolName,
     required this.score,
+    required this.trials,
     required this.timestamp,
   });
 
   Map<String, dynamic> toJson() => {
         'schoolName': schoolName,
         'score': score,
+        'trials': trials,
         'timestamp': timestamp.toIso8601String(),
       };
 
@@ -51,6 +54,7 @@ class LeaderboardEntry {
       LeaderboardEntry(
         schoolName: json['schoolName'] as String,
         score: json['score'] as int,
+        trials: json['trials'] as int? ?? 1,
         timestamp: DateTime.parse(json['timestamp'] as String),
       );
 }
@@ -180,11 +184,25 @@ class HistoryState {
   }
 
   static Future<void> addSpeedScore(String schoolName, int score) async {
-    speedLeaderboard.add(LeaderboardEntry(
-      schoolName: schoolName,
-      score: score,
-      timestamp: DateTime.now(),
-    ));
+    final existingIndex = speedLeaderboard.indexWhere(
+      (e) => e.schoolName.toLowerCase() == schoolName.toLowerCase(),
+    );
+
+    if (existingIndex != -1) {
+      final entry = speedLeaderboard[existingIndex];
+      entry.trials++;
+      if (score > entry.score) {
+        entry.score = score;
+      }
+    } else {
+      speedLeaderboard.add(LeaderboardEntry(
+        schoolName: schoolName,
+        score: score,
+        trials: 1,
+        timestamp: DateTime.now(),
+      ));
+    }
+
     speedLeaderboard.sort((a, b) => b.score.compareTo(a.score));
     await _saveSpeed();
   }
