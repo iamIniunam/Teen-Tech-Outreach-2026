@@ -227,8 +227,21 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                               Expanded(
                                 child: TextField(
                                   controller: _issueController,
+                                  onChanged: (text) {
+                                    setState(() {});
+                                  },
                                   decoration: InputDecoration(
                                     hintText: "Report a new local issue...",
+                                    suffixIcon: _issueController.text.isNotEmpty
+                                        ? IconButton(
+                                            icon: const Icon(Icons.clear_rounded),
+                                            onPressed: () {
+                                              setState(() {
+                                                _issueController.clear();
+                                              });
+                                            },
+                                          )
+                                        : null,
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     border: OutlineInputBorder(

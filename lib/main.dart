@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     ));
 
     return MaterialApp(
-      title: 'TeenTech Hub 2026',
+      title: 'TeenTech Hub',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
