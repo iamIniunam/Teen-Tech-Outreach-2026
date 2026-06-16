@@ -377,10 +377,9 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                                 ),
                               ),
                               IconButton.filled(
-                                onPressed: () {
-                                  setState(() {
-                                    submission.votes++;
-                                  });
+                                onPressed: () async {
+                                  await HistoryState.incrementCivicVote(index);
+                                  setState(() {});
                                 },
                                 icon: const Icon(Icons.thumb_up_rounded),
                                 style: IconButton.styleFrom(

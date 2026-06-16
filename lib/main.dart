@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:demo_app/home_page.dart';
+import 'package:demo_app/history_state.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await HistoryState.init();
   runApp(const MyApp());
 }
 

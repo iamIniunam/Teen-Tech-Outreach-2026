@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CivicSubmission {
   final String schoolName;
@@ -12,6 +14,20 @@ class CivicSubmission {
     required this.icon,
     required this.votes,
   });
+
+  Map<String, dynamic> toJson() => {
+        'schoolName': schoolName,
+        'issueTitle': issueTitle,
+        'icon': icon,
+        'votes': votes,
+      };
+
+  factory CivicSubmission.fromJson(Map<String, dynamic> json) => CivicSubmission(
+        schoolName: json['schoolName'] as String,
+        issueTitle: json['issueTitle'] as String,
+        icon: json['icon'] as String,
+        votes: json['votes'] as int,
+      );
 }
 
 class LeaderboardEntry {
@@ -24,6 +40,19 @@ class LeaderboardEntry {
     required this.score,
     required this.timestamp,
   });
+
+  Map<String, dynamic> toJson() => {
+        'schoolName': schoolName,
+        'score': score,
+        'timestamp': timestamp.toIso8601String(),
+      };
+
+  factory LeaderboardEntry.fromJson(Map<String, dynamic> json) =>
+      LeaderboardEntry(
+        schoolName: json['schoolName'] as String,
+        score: json['score'] as int,
+        timestamp: DateTime.parse(json['timestamp'] as String),
+      );
 }
 
 class ArtSubmission {
@@ -36,90 +65,136 @@ class ArtSubmission {
     required this.gridColors,
     required this.gridSize,
   });
+
+  Map<String, dynamic> toJson() => {
+        'schoolName': schoolName,
+        'gridColors': gridColors.map((c) => c.value).toList(),
+        'gridSize': gridSize,
+      };
+
+  factory ArtSubmission.fromJson(Map<String, dynamic> json) => ArtSubmission(
+        schoolName: json['schoolName'] as String,
+        gridSize: json['gridSize'] as int,
+        gridColors: (json['gridColors'] as List<dynamic>)
+            .map((v) => Color(v as int))
+            .toList(),
+      );
 }
 
 class HistoryState {
-  // Pre-populated data for Accra schools to make it look active and exciting!
-  static final List<CivicSubmission> civicSubmissions = [
-    CivicSubmission(
-      schoolName: "Teshie Presby",
-      issueTitle: "Provide more waste bins along the Teshie Beach Road",
-      icon: "🗑️",
-      votes: 18,
-    ),
-    CivicSubmission(
-      schoolName: "La Bone SHS",
-      issueTitle: "Install solar streetlights near the community market",
-      icon: "💡",
-      votes: 24,
-    ),
-    CivicSubmission(
-      schoolName: "Osu Prep School",
-      issueTitle: "Build a tech lab for kids at Osu Library",
-      icon: "💻",
-      votes: 35,
-    ),
-  ];
+  static SharedPreferences? _prefs;
 
-  static final List<LeaderboardEntry> speedLeaderboard = [
-    LeaderboardEntry(schoolName: "Achimota School", score: 52, timestamp: DateTime.now()),
-    LeaderboardEntry(schoolName: "Accra Academy", score: 48, timestamp: DateTime.now()),
-    LeaderboardEntry(schoolName: "Teshie Tech Club", score: 45, timestamp: DateTime.now()),
-    LeaderboardEntry(schoolName: "La Bone SHS", score: 39, timestamp: DateTime.now()),
-  ];
+  // Active entries - all initialized to start completely empty
+  static final List<CivicSubmission> civicSubmissions = [];
+  static final List<LeaderboardEntry> speedLeaderboard = [];
+  static final List<ArtSubmission> artGallery = [];
 
-  static final List<ArtSubmission> artGallery = [
-    // Pre-populate with a simple pixel heart and a smile!
-    ArtSubmission(
-      schoolName: "Teshie Presby",
-      gridSize: 6,
-      gridColors: [
-        Colors.grey.shade800, Colors.red, Colors.grey.shade800, Colors.grey.shade800, Colors.red, Colors.grey.shade800,
-        Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red,
-        Colors.red, Colors.red, Colors.red, Colors.red, Colors.red, Colors.red,
-        Colors.grey.shade800, Colors.red, Colors.red, Colors.red, Colors.red, Colors.grey.shade800,
-        Colors.grey.shade800, Colors.grey.shade800, Colors.red, Colors.red, Colors.grey.shade800, Colors.grey.shade800,
-        Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800,
-      ],
-    ),
-    ArtSubmission(
-      schoolName: "Accra Academy",
-      gridSize: 6,
-      gridColors: [
-        Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800,
-        Colors.grey.shade800, Colors.yellow, Colors.grey.shade800, Colors.grey.shade800, Colors.yellow, Colors.grey.shade800,
-        Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800,
-        Colors.yellow, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.yellow,
-        Colors.grey.shade800, Colors.yellow, Colors.yellow, Colors.yellow, Colors.yellow, Colors.grey.shade800,
-        Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800, Colors.grey.shade800,
-      ],
-    ),
-  ];
+  // Keys for SharedPreferences
+  static const String _keyCivic = 'civic_submissions_v1';
+  static const String _keySpeed = 'speed_leaderboard_v1';
+  static const String _keyArt = 'art_gallery_v1';
 
-  static void addCivic(String schoolName, String issueTitle, String icon) {
+  // Initialize SharedPreferences and load data
+  static Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    _loadData();
+  }
+
+  static void _loadData() {
+    if (_prefs == null) return;
+
+    // Load Civic Submissions
+    final List<String>? civicJsonList = _prefs!.getStringList(_keyCivic);
+    if (civicJsonList != null) {
+      civicSubmissions.clear();
+      for (final jsonStr in civicJsonList) {
+        try {
+          final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
+          civicSubmissions.add(CivicSubmission.fromJson(decoded));
+        } catch (_) {}
+      }
+    }
+
+    // Load Speed Leaderboard
+    final List<String>? speedJsonList = _prefs!.getStringList(_keySpeed);
+    if (speedJsonList != null) {
+      speedLeaderboard.clear();
+      for (final jsonStr in speedJsonList) {
+        try {
+          final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
+          speedLeaderboard.add(LeaderboardEntry.fromJson(decoded));
+        } catch (_) {}
+      }
+      speedLeaderboard.sort((a, b) => b.score.compareTo(a.score));
+    }
+
+    // Load Art Gallery Masterpieces
+    final List<String>? artJsonList = _prefs!.getStringList(_keyArt);
+    if (artJsonList != null) {
+      artGallery.clear();
+      for (final jsonStr in artJsonList) {
+        try {
+          final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
+          artGallery.add(ArtSubmission.fromJson(decoded));
+        } catch (_) {}
+      }
+    }
+  }
+
+  // Save persistence operations
+  static Future<void> _saveCivic() async {
+    if (_prefs == null) return;
+    final jsonList = civicSubmissions.map((e) => jsonEncode(e.toJson())).toList();
+    await _prefs!.setStringList(_keyCivic, jsonList);
+  }
+
+  static Future<void> _saveSpeed() async {
+    if (_prefs == null) return;
+    final jsonList = speedLeaderboard.map((e) => jsonEncode(e.toJson())).toList();
+    await _prefs!.setStringList(_keySpeed, jsonList);
+  }
+
+  static Future<void> _saveArt() async {
+    if (_prefs == null) return;
+    final jsonList = artGallery.map((e) => jsonEncode(e.toJson())).toList();
+    await _prefs!.setStringList(_keyArt, jsonList);
+  }
+
+  // Add Entries & persist
+  static Future<void> addCivic(String schoolName, String issueTitle, String icon) async {
     civicSubmissions.add(CivicSubmission(
       schoolName: schoolName,
       issueTitle: issueTitle,
       icon: icon,
       votes: 1,
     ));
+    await _saveCivic();
   }
 
-  static void addSpeedScore(String schoolName, int score) {
+  // Increment support vote on a global submission
+  static Future<void> incrementCivicVote(int index) async {
+    if (index >= 0 && index < civicSubmissions.length) {
+      civicSubmissions[index].votes++;
+      await _saveCivic();
+    }
+  }
+
+  static Future<void> addSpeedScore(String schoolName, int score) async {
     speedLeaderboard.add(LeaderboardEntry(
       schoolName: schoolName,
       score: score,
       timestamp: DateTime.now(),
     ));
-    // Sort highest to lowest
     speedLeaderboard.sort((a, b) => b.score.compareTo(a.score));
+    await _saveSpeed();
   }
 
-  static void addArt(String schoolName, List<Color> gridColors, int gridSize) {
+  static Future<void> addArt(String schoolName, List<Color> gridColors, int gridSize) async {
     artGallery.add(ArtSubmission(
       schoolName: schoolName,
       gridColors: List.from(gridColors),
       gridSize: gridSize,
     ));
+    await _saveArt();
   }
 }
