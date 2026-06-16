@@ -234,7 +234,8 @@ class _CivicDashboardPageState extends State<CivicDashboardPage> {
                                     hintText: "Report a new local issue...",
                                     suffixIcon: _issueController.text.isNotEmpty
                                         ? IconButton(
-                                            icon: const Icon(Icons.clear_rounded),
+                                            icon:
+                                                const Icon(Icons.clear_rounded),
                                             onPressed: () {
                                               setState(() {
                                                 _issueController.clear();
