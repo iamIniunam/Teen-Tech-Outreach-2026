@@ -1,5 +1,5 @@
-import 'package:demo_app/thank_you_page.dart';
 import 'package:flutter/material.dart';
+import 'package:demo_app/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,93 +10,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    // =================================================================
+    // 👉 KID CODER TASK: CHANGE THE APP COLOR!
+    // Find "Colors.deepPurple" below. Try changing it to another color:
+    // Colors.blue, Colors.teal, Colors.amber, Colors.pink, Colors.red, Colors.green
+    // Then press Save (Ctrl + S) to watch the app colors change instantly!
+    // =================================================================
+    const Color primarySeedColor = Colors.deepPurple;
+
+    return MaterialApp(
+      title: 'TeenTech Hub 2026',
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-      // home: HomeworkPage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int messageIndex = 0;
-  int colorIndex = 0;
-
-  List<String> messages = [
-    'Hello Yongdal Academy!',
-    'You built an app!',
-    'Welcome to Tech!',
-    'Future App Developer!',
-  ];
-
-  List<Color> colors = [
-    Colors.blue,
-    Colors.red,
-    Colors.green,
-    Colors.orange,
-    Colors.brown
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colors[colorIndex],
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Text
-              Text(
-                messages[messageIndex],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 36,
-                  color: Colors.black,
-                ),
-              ),
-
-              // Spacing
-              const SizedBox(height: 20),
-
-              // // Button
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    messageIndex = (messageIndex + 1) % messages.length;
-                    colorIndex = (colorIndex + 1) % colors.length;
-                  });
-                },
-                child: const Text('Tap me'),
-              ),
-
-              // Spacing
-              const SizedBox(height: 20),
-
-              // Button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ThankYouPage(bgColor: colors[colorIndex]),
-                    ),
-                  );
-                },
-                child: const Text('Navigate'),
-              ),
-            ],
-          ),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primarySeedColor,
+          brightness: Brightness.dark, // Sleek dark mode for modern visual appeal
         ),
+        useMaterial3: true,
+        fontFamily: 'Roboto', // Modern, clean typography
       ),
+      home: const HomePage(),
     );
   }
 }
