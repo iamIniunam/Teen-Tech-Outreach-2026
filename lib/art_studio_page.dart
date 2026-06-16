@@ -11,13 +11,17 @@ class ArtStudioPage extends StatefulWidget {
 }
 
 class _ArtStudioPageState extends State<ArtStudioPage> {
-  // Grid size configuration (6x6)
+  // =================================================================
+  // 👉 KID CODER TASK 1: CHANGE THE GRID CANVAS SIZE!
+  // Find the number 6 below. Change it to 4 or 8 to resize the drawing board!
+  // Note: After saving, press Hot Restart (Shift + R in the console) to reset the grid!
+  // =================================================================
   static const int _gridSize = 6;
   late List<Color> _gridColors;
   Color _selectedColor = Colors.red;
 
   // =================================================================
-  // 👉 KID CODER TASK: ADD NEW COLORS TO THE PAINT PALETTE!
+  // 👉 KID CODER TASK 2: ADD NEW COLORS TO THE PAINT PALETTE!
   // Try adding a new color to this list, like: Colors.pink, Colors.orange,
   // Colors.deepOrange, Colors.lime, Colors.cyan, or Colors.brown.
   // Save (Ctrl + S) to see the new paint circles appear in the color row!
